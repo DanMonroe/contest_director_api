@@ -14,7 +14,7 @@ use Mix.Config
 config :contest_director_api, ContestDirectorApi.Endpoint,
   http: [port: {:system, "PORT"}],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
-  url: [host: "", port: 443],
+  url: [host: "shielded-peak-76475.herokuapp.com", port: 443],
   secret_key_base: System.get_env("SECRET_KEY_BASE")
 
 config :peepchat, ContestDirectorApi.Repo,
