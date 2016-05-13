@@ -1,11 +1,17 @@
 language: elixir
 elixir:
-  - 1.2
+- 1.2
 otp_release:
-  - 18.2
+- 18.2
 sudo: false
 addons:
-  postgresql: '9.4' # Use postgres 9.4
+  postgresql: '9.4'
 before_script:
-# Create the test database
 - psql -c 'create database contest_director_api_test;' -U postgres
+deploy:
+  provider: heroku
+  api_key:
+    secure: aSnJ5dwzWArK+TjUy0KfFNCGkg9ZhCTSfOvT5T57z3gGcy0k7uf3aIr3yJnMJcbhUY3SSU1Nq2kLQW/YA3722cimF8cVgb7HviRpx8pi7ZeKVMdGHlBrBKItM3WhQ47hKIY3dxIR2cXZ0b959wM1bVqznzeDvHs9gXAAJiFJGRKqWsgV4Hge++BTBS6f4Ztx4+I4lAS9F+wqfjhK4syfLB6DQRJlxY3zLh3czm7x8k6dgUTbVyRqmlA61FJsToBa4BY4HSOe/c+wwjhZO4iMRfwc6OBuG2Cv+XZiYMbtdz2SqhWOgD9Tl7M51GJ7wS/3MAP1kvbWtd/k52sh73DCushYhXFZNnmEO27eBYv/0kpJ8Ty9xHly+X16AOPdGoAvtlOIO4NwMK3hHqyEzbEkUltGvIWwN0SZH82rDjBlZKPraWUAA3sww61i+K9A4X+WswuzvKZx4p+H956XIMwG/Q8nhxxmsE6Urdzmhmeh+atBWB2DqcDy9KYX/qCCY0BfCRdfkT34svSklYNuIc4l2KyV9O0/V0JVYIJ6er90lT3DFgQOnHLdkLcQCV8j53fxsTyN9VFvGPIWBm8uHfwyaKUV/avjde2af7VuBSuk6puf3KAOLkGhzJN6HII7wbC+SSOSHKs3iIt4MqxPOrRVPyzo1j3P4v9toqom7gio+CY=
+  app: shielded-peak-76475
+  on:
+    repo: DanMonroe/contest_director_api
