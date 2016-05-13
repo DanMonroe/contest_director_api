@@ -17,7 +17,7 @@ config :contest_director_api, ContestDirectorApi.Endpoint,
   url: [host: "shielded-peak-76475.herokuapp.com", port: 443],
   secret_key_base: System.get_env("SECRET_KEY_BASE")
 
-config :peepchat, ContestDirectorApi.Repo,
+config :contest_director_api, ContestDirectorApi.Repo,
   adapter: Ecto.Adapters.Postgres,
   url: System.get_env("DATABASE_URL"),
   pool_size: 20
