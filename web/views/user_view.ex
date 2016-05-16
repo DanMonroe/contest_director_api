@@ -1,5 +1,6 @@
 defmodule ContestDirectorApi.UserView do
   use ContestDirectorApi.Web, :view
+  # use JaSerializer.PhoenixView
 
   def render("index.json", %{users: users}) do
     %{data: render_many(users, ContestDirectorApi.UserView, "user.json")}
