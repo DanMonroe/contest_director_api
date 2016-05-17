@@ -3,6 +3,8 @@ defmodule ContestDirectorApi.Router do
 
   pipeline :api do
     plug :accepts, ["json", "json-api"]
+    # plug JaSerializer.ContentTypeNegotiation
+    # plug JaSerializer.Deserializer
   end
 
   # Authenticated Requests
@@ -20,6 +22,9 @@ defmodule ContestDirectorApi.Router do
     
     # Route stuff to our SessionController
     post "token", SessionController, :create, as: :login
+
+    resources "/aircrafttypes", AircrafttypeController, except: [:new, :edit]
+    resources "/contests", ContestController, except: [:new, :edit]
   end
 
   scope "/api", ContestDirectorApi do
