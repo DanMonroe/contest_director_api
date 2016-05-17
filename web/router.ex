@@ -23,9 +23,12 @@ defmodule ContestDirectorApi.Router do
     # Route stuff to our SessionController
     post "token", SessionController, :create, as: :login
 
-    resources "/aircrafttypes", AircrafttypeController, except: [:new, :edit]
+    resources "/aircrafttypes", AircrafttypeController, except: [:new, :edit] do
+      get "pilotclasses", PilotclassController, :index, as: :pilotclasses
+    end
     resources "/contests", ContestController, except: [:new, :edit]
     resources "/pilots", PilotController, except: [:new, :edit]
+    resources "/pilotclasses", PilotclassController, except: [:new, :edit]
   end
 
   scope "/api", ContestDirectorApi do
