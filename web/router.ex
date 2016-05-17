@@ -25,6 +25,7 @@ defmodule ContestDirectorApi.Router do
 
     resources "/aircrafttypes", AircrafttypeController, except: [:new, :edit]
     resources "/contests", ContestController, except: [:new, :edit]
+    resources "/pilots", PilotController, except: [:new, :edit]
   end
 
   scope "/api", ContestDirectorApi do
