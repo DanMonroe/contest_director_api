@@ -14,7 +14,7 @@ defmodule ContestDirectorApi.AircrafttypeControllerTest do
 
     {:ok, conn: conn}
   end
-  
+
   defp relationships do
     %{}
   end
@@ -43,7 +43,7 @@ defmodule ContestDirectorApi.AircrafttypeControllerTest do
     conn = post conn, aircrafttype_path(conn, :create), %{
       "meta" => %{},
       "data" => %{
-        "type" => "aircrafttype",
+        "type" => "aircrafttypes",
         "attributes" => @valid_attrs,
         "relationships" => relationships
       }
@@ -57,7 +57,7 @@ defmodule ContestDirectorApi.AircrafttypeControllerTest do
     conn = post conn, aircrafttype_path(conn, :create), %{
       "meta" => %{},
       "data" => %{
-        "type" => "aircrafttype",
+        "type" => "aircrafttypes",
         "attributes" => @invalid_attrs,
         "relationships" => relationships
       }
@@ -71,7 +71,7 @@ defmodule ContestDirectorApi.AircrafttypeControllerTest do
     conn = put conn, aircrafttype_path(conn, :update, aircrafttype), %{
       "meta" => %{},
       "data" => %{
-        "type" => "aircrafttype",
+        "type" => "aircrafttypes",
         "id" => aircrafttype.id,
         "attributes" => @valid_attrs,
         "relationships" => relationships
@@ -87,7 +87,7 @@ defmodule ContestDirectorApi.AircrafttypeControllerTest do
     conn = put conn, aircrafttype_path(conn, :update, aircrafttype), %{
       "meta" => %{},
       "data" => %{
-        "type" => "aircrafttype",
+        "type" => "aircrafttypes",
         "id" => aircrafttype.id,
         "attributes" => @invalid_attrs,
         "relationships" => relationships

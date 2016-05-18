@@ -14,8 +14,8 @@ defmodule ContestDirectorApi.PilotclassControllerTest do
 
     {:ok, conn: conn}
   end
-  
-  defp relationships do 
+
+  defp relationships do
     aircrafttype = Repo.insert!(%ContestDirectorApi.Aircrafttype{})
 
     %{
@@ -53,7 +53,7 @@ defmodule ContestDirectorApi.PilotclassControllerTest do
     conn = post conn, pilotclass_path(conn, :create), %{
       "meta" => %{},
       "data" => %{
-        "type" => "pilotclass",
+        "type" => "pilotclasses",
         "attributes" => @valid_attrs,
         "relationships" => relationships
       }
@@ -67,7 +67,7 @@ defmodule ContestDirectorApi.PilotclassControllerTest do
     conn = post conn, pilotclass_path(conn, :create), %{
       "meta" => %{},
       "data" => %{
-        "type" => "pilotclass",
+        "type" => "pilotclasses",
         "attributes" => @invalid_attrs,
         "relationships" => relationships
       }
@@ -81,7 +81,7 @@ defmodule ContestDirectorApi.PilotclassControllerTest do
     conn = put conn, pilotclass_path(conn, :update, pilotclass), %{
       "meta" => %{},
       "data" => %{
-        "type" => "pilotclass",
+        "type" => "pilotclasses",
         "id" => pilotclass.id,
         "attributes" => @valid_attrs,
         "relationships" => relationships
@@ -97,7 +97,7 @@ defmodule ContestDirectorApi.PilotclassControllerTest do
     conn = put conn, pilotclass_path(conn, :update, pilotclass), %{
       "meta" => %{},
       "data" => %{
-        "type" => "pilotclass",
+        "type" => "pilotclasses",
         "id" => pilotclass.id,
         "attributes" => @invalid_attrs,
         "relationships" => relationships
