@@ -13,9 +13,9 @@ defmodule ContestDirectorApi.PilotclassController do
     render(conn, "index.json", data: pilotclasses)
   end
 
-  def create(conn, %{"data" => data = %{"type" => "pilotclass", "attributes" => _pilotclass_params, "relationships" => _}}) do
+  def create(conn, %{"data" => data = %{"type" => "pilotclasses", "attributes" => _pilotclass_params, "relationships" => _}}) do
     IEx.pry
-    
+
     changeset = Pilotclass.changeset(%Pilotclass{}, Params.to_attributes(data))
 
     case Repo.insert(changeset) do
@@ -36,7 +36,7 @@ defmodule ContestDirectorApi.PilotclassController do
     render(conn, "show.json", data: pilotclass)
   end
 
-  def update(conn, %{"id" => id, "data" => data = %{"type" => "pilotclass", "attributes" => _pilotclass_params}}) do
+  def update(conn, %{"id" => id, "data" => data = %{"type" => "pilotclasses", "attributes" => _pilotclass_params}}) do
     pilotclass = Repo.get!(Pilotclass, id)
     changeset = Pilotclass.changeset(pilotclass, Params.to_attributes(data))
 

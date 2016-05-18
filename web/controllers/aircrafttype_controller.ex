@@ -11,7 +11,7 @@ defmodule ContestDirectorApi.AircrafttypeController do
     render(conn, "index.json", data: aircrafttypes)
   end
 
-  def create(conn, %{"data" => data = %{"type" => "aircrafttype", "attributes" => _aircrafttype_params}}) do
+  def create(conn, %{"data" => data = %{"type" => "aircrafttypes", "attributes" => _aircrafttype_params}}) do
     changeset = Aircrafttype.changeset(%Aircrafttype{}, Params.to_attributes(data))
 
     case Repo.insert(changeset) do
@@ -32,7 +32,7 @@ defmodule ContestDirectorApi.AircrafttypeController do
     render(conn, "show.json", data: aircrafttype)
   end
 
-  def update(conn, %{"id" => id, "data" => data = %{"type" => "aircrafttype", "attributes" => _aircrafttype_params}}) do
+  def update(conn, %{"id" => id, "data" => data = %{"type" => "aircrafttypes", "attributes" => _aircrafttype_params}}) do
     aircrafttype = Repo.get!(Aircrafttype, id)
     changeset = Aircrafttype.changeset(aircrafttype, Params.to_attributes(data))
 
