@@ -14,7 +14,7 @@ defmodule ContestDirectorApi.ContestControllerTest do
 
     {:ok, conn: conn}
   end
-  
+
   defp relationships do
     %{}
   end
@@ -45,7 +45,7 @@ defmodule ContestDirectorApi.ContestControllerTest do
     conn = post conn, contest_path(conn, :create), %{
       "meta" => %{},
       "data" => %{
-        "type" => "contest",
+        "type" => "contests",
         "attributes" => @valid_attrs,
         "relationships" => relationships
       }
@@ -59,7 +59,7 @@ defmodule ContestDirectorApi.ContestControllerTest do
     conn = post conn, contest_path(conn, :create), %{
       "meta" => %{},
       "data" => %{
-        "type" => "contest",
+        "type" => "contests",
         "attributes" => @invalid_attrs,
         "relationships" => relationships
       }
@@ -73,7 +73,7 @@ defmodule ContestDirectorApi.ContestControllerTest do
     conn = put conn, contest_path(conn, :update, contest), %{
       "meta" => %{},
       "data" => %{
-        "type" => "contest",
+        "type" => "contests",
         "id" => contest.id,
         "attributes" => @valid_attrs,
         "relationships" => relationships
@@ -89,7 +89,7 @@ defmodule ContestDirectorApi.ContestControllerTest do
     conn = put conn, contest_path(conn, :update, contest), %{
       "meta" => %{},
       "data" => %{
-        "type" => "contest",
+        "type" => "contests",
         "id" => contest.id,
         "attributes" => @invalid_attrs,
         "relationships" => relationships

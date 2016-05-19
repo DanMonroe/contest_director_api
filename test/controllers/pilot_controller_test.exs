@@ -14,7 +14,7 @@ defmodule ContestDirectorApi.PilotControllerTest do
 
     {:ok, conn: conn}
   end
-  
+
   defp relationships do
     %{}
   end
@@ -47,7 +47,7 @@ defmodule ContestDirectorApi.PilotControllerTest do
     conn = post conn, pilot_path(conn, :create), %{
       "meta" => %{},
       "data" => %{
-        "type" => "pilot",
+        "type" => "pilots",
         "attributes" => @valid_attrs,
         "relationships" => relationships
       }
@@ -61,7 +61,7 @@ defmodule ContestDirectorApi.PilotControllerTest do
     conn = post conn, pilot_path(conn, :create), %{
       "meta" => %{},
       "data" => %{
-        "type" => "pilot",
+        "type" => "pilots",
         "attributes" => @invalid_attrs,
         "relationships" => relationships
       }
@@ -75,7 +75,7 @@ defmodule ContestDirectorApi.PilotControllerTest do
     conn = put conn, pilot_path(conn, :update, pilot), %{
       "meta" => %{},
       "data" => %{
-        "type" => "pilot",
+        "type" => "pilots",
         "id" => pilot.id,
         "attributes" => @valid_attrs,
         "relationships" => relationships
@@ -91,7 +91,7 @@ defmodule ContestDirectorApi.PilotControllerTest do
     conn = put conn, pilot_path(conn, :update, pilot), %{
       "meta" => %{},
       "data" => %{
-        "type" => "pilot",
+        "type" => "pilots",
         "id" => pilot.id,
         "attributes" => @invalid_attrs,
         "relationships" => relationships

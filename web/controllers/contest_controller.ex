@@ -11,7 +11,7 @@ defmodule ContestDirectorApi.ContestController do
     render(conn, "index.json", data: contests)
   end
 
-  def create(conn, %{"data" => data = %{"type" => "contest", "attributes" => _contest_params}}) do
+  def create(conn, %{"data" => data = %{"type" => "contests", "attributes" => _contest_params}}) do
     changeset = Contest.changeset(%Contest{}, Params.to_attributes(data))
 
     case Repo.insert(changeset) do
@@ -32,7 +32,7 @@ defmodule ContestDirectorApi.ContestController do
     render(conn, "show.json", data: contest)
   end
 
-  def update(conn, %{"id" => id, "data" => data = %{"type" => "contest", "attributes" => _contest_params}}) do
+  def update(conn, %{"id" => id, "data" => data = %{"type" => "contests", "attributes" => _contest_params}}) do
     contest = Repo.get!(Contest, id)
     changeset = Contest.changeset(contest, Params.to_attributes(data))
 
