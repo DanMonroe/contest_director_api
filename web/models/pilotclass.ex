@@ -4,7 +4,7 @@ defmodule ContestDirectorApi.Pilotclass do
   schema "pilotclasses" do
     field :name, :string
     belongs_to :aircrafttype, ContestDirectorApi.Aircrafttype
-
+    has_many :maneuversets, ContestDirectorApi.Manueverset
     timestamps
   end
 

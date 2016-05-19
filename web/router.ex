@@ -19,7 +19,7 @@ defmodule ContestDirectorApi.Router do
 
 	  # Registration
     post "register", RegistrationController, :create
-    
+
     # Route stuff to our SessionController
     post "token", SessionController, :create, as: :login
 
@@ -28,7 +28,10 @@ defmodule ContestDirectorApi.Router do
     end
     resources "/contests", ContestController, except: [:new, :edit]
     resources "/pilots", PilotController, except: [:new, :edit]
-    resources "/pilotclasses", PilotclassController, except: [:new, :edit]
+    resources "/pilotclasses", PilotclassController, except: [:new, :edit] do
+      get "maneuversets", ManeuversetController, :index, as: :maneuversets
+    end
+    resources "/maneuversets", ManeuversetController, except: [:new, :edit]
   end
 
   scope "/api", ContestDirectorApi do
