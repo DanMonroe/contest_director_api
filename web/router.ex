@@ -31,7 +31,12 @@ defmodule ContestDirectorApi.Router do
     resources "/pilotclasses", PilotclassController, except: [:new, :edit] do
       get "maneuversets", ManeuversetController, :index, as: :maneuversets
     end
-    resources "/maneuversets", ManeuversetController, except: [:new, :edit]
+    resources "/maneuversets", ManeuversetController, except: [:new, :edit] do
+      get "maneuvers", ManeuversController, :index, as: :maneuvers
+    end
+
+    resources "/maneuvers", ManeuverController, except: [:new, :edit]
+
   end
 
   scope "/api", ContestDirectorApi do

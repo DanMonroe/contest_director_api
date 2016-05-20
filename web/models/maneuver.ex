@@ -1,14 +1,18 @@
-defmodule ContestDirectorApi.Maneuverset do
+defmodule ContestDirectorApi.Maneuver do
   use ContestDirectorApi.Web, :model
 
-  schema "maneuversets" do
+  schema "maneuvers" do
     field :name, :string
-    belongs_to :pilotclass, ContestDirectorApi.Pilotclass
-    has_many :maneuvers, ContestDirectorApi.Manuever
+    field :order, :integer
+    field :minscore, :float
+    field :maxscore, :float
+    field :kfactor, :float
+    belongs_to :maneuverset, ContestDirectorApi.Maneuverset
+
     timestamps
   end
 
-  @required_fields ~w(name)
+  @required_fields ~w(name order minscore maxscore kfactor)
   @optional_fields ~w()
 
   @doc """

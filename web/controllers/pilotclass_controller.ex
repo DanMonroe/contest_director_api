@@ -1,5 +1,3 @@
-require IEx
-
 defmodule ContestDirectorApi.PilotclassController do
   use ContestDirectorApi.Web, :controller
 
@@ -13,10 +11,28 @@ defmodule ContestDirectorApi.PilotclassController do
     render(conn, "index.json", data: pilotclasses)
   end
 
-  def create(conn, %{"data" => data = %{"type" => "pilotclasses", "attributes" => _pilotclass_params, "relationships" => _}}) do
-    IEx.pry
+  # def create(conn, %{"data" => data}) do
+  #     attrs = JaSerializer.Params.to_attributes(data)
+  #     changeset = Pilotclass.changeset(%Pilotclass{}, attrs)
+  #     case Repo.insert(changeset) do
+  #       {:ok, pilotclass} ->
+  #         conn
+  #         |> put_status(201)
+  #         |> render(:show, data: pilotclass)
+  #       {:error, changeset} ->
+  #         conn
+  #         |> put_status(422)
+  #         |> render(:errors, data: changeset)
+  #     end
+  #   end
+  #
+  def create(conn, %{"data" => data = %{"type" => "pilotclasses",
+    "attributes" => _pilotclass_params,
+    "relationships" => relationship_params}}) do
 
-    changeset = Pilotclass.changeset(%Pilotclass{}, Params.to_attributes(data))
+    changeset = Pilotclass.changeset(%Pilotclass{
+      aircrafttype_id: String.to_integer(relationship_params["aircrafttype"]["data"]["id"])
+      }, Params.to_attributes(data))
 
     case Repo.insert(changeset) do
       {:ok, pilotclass} ->
