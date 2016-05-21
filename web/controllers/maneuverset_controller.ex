@@ -11,8 +11,16 @@ defmodule ContestDirectorApi.ManeuversetController do
     render(conn, "index.json", data: maneuversets)
   end
 
-  def create(conn, %{"data" => data = %{"type" => "maneuversets", "attributes" => _maneuverset_params}}) do
-    changeset = Maneuverset.changeset(%Maneuverset{}, Params.to_attributes(data))
+  def create(conn, %{"data" => data = %{"type" => "maneuversets",
+    "attributes" => _maneuverset_params,
+    "relationships" => relationship_params}}) do
+    # changeset = Maneuverset.changeset(%Maneuverset{}, Params.to_attributes(data))
+
+    changeset = Maneuverset.changeset(%Maneuverset{
+      pilotclass_id: String.to_integer(relationship_params["pilotclass"]["data"]["id"])
+      }, Params.to_attributes(data))
+
+
 
     case Repo.insert(changeset) do
       {:ok, maneuverset} ->

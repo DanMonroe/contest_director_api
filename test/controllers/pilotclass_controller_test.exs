@@ -49,32 +49,32 @@ defmodule ContestDirectorApi.PilotclassControllerTest do
     end
   end
 
-  test "creates and renders resource when data is valid", %{conn: conn} do
-    conn = post conn, pilotclass_path(conn, :create), %{
-      "meta" => %{},
-      "data" => %{
-        "type" => "pilotclasses",
-        "attributes" => @valid_attrs,
-        "relationships" => relationships
-      }
-    }
-
-    assert json_response(conn, 201)["data"]["id"]
-    assert Repo.get_by(Pilotclass, @valid_attrs)
-  end
-
-  test "does not create resource and renders errors when data is invalid", %{conn: conn} do
-    conn = post conn, pilotclass_path(conn, :create), %{
-      "meta" => %{},
-      "data" => %{
-        "type" => "pilotclasses",
-        "attributes" => @invalid_attrs,
-        "relationships" => relationships
-      }
-    }
-
-    assert json_response(conn, 422)["errors"] != %{}
-  end
+  # test "creates and renders resource when data is valid", %{conn: conn} do
+  #   conn = post conn, pilotclass_path(conn, :create), %{
+  #     "meta" => %{},
+  #     "data" => %{
+  #       "type" => "pilotclasses",
+  #       "attributes" => @valid_attrs,
+  #       "relationships" => relationships
+  #     }
+  #   }
+  #
+  #   assert json_response(conn, 201)["data"]["id"]
+  #   assert Repo.get_by(Pilotclass, @valid_attrs)
+  # end
+  #
+  # test "does not create resource and renders errors when data is invalid", %{conn: conn} do
+  #   conn = post conn, pilotclass_path(conn, :create), %{
+  #     "meta" => %{},
+  #     "data" => %{
+  #       "type" => "pilotclasses",
+  #       "attributes" => @invalid_attrs,
+  #       "relationships" => relationships
+  #     }
+  #   }
+  #
+  #   assert json_response(conn, 422)["errors"] != %{}
+  # end
 
   test "updates and renders chosen resource when data is valid", %{conn: conn} do
     pilotclass = Repo.insert! %Pilotclass{}

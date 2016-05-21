@@ -1,16 +1,16 @@
-defmodule ContestDirectorApi.Contest do
+defmodule ContestDirectorApi.ContestRegistration do
   use ContestDirectorApi.Web, :model
 
-  schema "contests" do
-    field :name, :string
-    field :slug, :string
-    field :aircrafttype_id, :integer
-    has_many :contestregistrations, ContestDirectorApi.ContestRegistration
+  schema "contestregistrations" do
+    belongs_to :contest, ContestDirectorApi.Contest
+    belongs_to :pilotclass, ContestDirectorApi.Pilotclass
+    belongs_to :pilot, ContestDirectorApi.Pilot
+
     timestamps
   end
 
-  @required_fields ~w(name slug)
-  @optional_fields ~w(aircrafttype_id)
+  @required_fields ~w()
+  @optional_fields ~w()
 
   @doc """
   Creates a changeset based on the `model` and `params`.
