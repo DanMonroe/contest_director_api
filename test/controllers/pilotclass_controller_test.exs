@@ -4,7 +4,7 @@ defmodule ContestDirectorApi.PilotclassControllerTest do
   alias ContestDirectorApi.Pilotclass
   alias ContestDirectorApi.Repo
 
-  @valid_attrs %{name: "some content"}
+  @valid_attrs %{name: "some content", order: 1}
   @invalid_attrs %{}
 
   setup do
@@ -40,6 +40,7 @@ defmodule ContestDirectorApi.PilotclassControllerTest do
     assert data["id"] == "#{pilotclass.id}"
     assert data["type"] == "pilotclass"
     assert data["attributes"]["name"] == pilotclass.name
+    assert data["attributes"]["order"] == pilotclass.order
     assert data["attributes"]["aircrafttype_id"] == pilotclass.aircrafttype_id
   end
 

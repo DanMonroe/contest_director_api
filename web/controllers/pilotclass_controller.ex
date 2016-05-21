@@ -1,13 +1,28 @@
 defmodule ContestDirectorApi.PilotclassController do
+  require Logger
+
   use ContestDirectorApi.Web, :controller
+
+  # import Ecto.Query
+  import Ecto.Query, only: [from: 2]
 
   alias ContestDirectorApi.Pilotclass
   alias JaSerializer.Params
 
   plug :scrub_params, "data" when action in [:create, :update]
 
-  def index(conn, _params) do
-    pilotclasses = Repo.all(Pilotclass)
+  def index(conn, params) do
+    aircrafttypeId = params["filter"]["aircrafttypeId"]
+    if params["filter"]["aircrafttypeId"] do
+      # aircrafttypeId = params["filter"]["aircrafttypeId"]
+      query = from p in Pilotclass,
+        where: p.aircrafttype_id == ^aircrafttypeId,
+        order_by: p.order,
+        select: p
+      pilotclasses = Repo.all(query)
+    else
+      pilotclasses = Repo.all(Pilotclass)
+    end
     render(conn, "index.json", data: pilotclasses)
   end
 

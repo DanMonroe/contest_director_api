@@ -3,13 +3,14 @@ defmodule ContestDirectorApi.Pilotclass do
 
   schema "pilotclasses" do
     field :name, :string
+    field :order, :integer
     belongs_to :aircrafttype, ContestDirectorApi.Aircrafttype
     has_many :maneuversets, ContestDirectorApi.Manueverset
     timestamps
   end
 
   @required_fields ~w(name)
-  @optional_fields ~w()
+  @optional_fields ~w(order)
 
   @doc """
   Creates a changeset based on the `model` and `params`.
