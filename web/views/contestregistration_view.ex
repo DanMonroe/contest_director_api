@@ -1,8 +1,8 @@
-defmodule ContestDirectorApi.ContestRegistrationView do
+defmodule ContestDirectorApi.ContestregistrationView do
   use ContestDirectorApi.Web, :view
   use JaSerializer.PhoenixView
 
-  attributes [:inserted_at, :updated_at]
+  attributes [:pilotname, :inserted_at, :updated_at]
   
   has_one :contest,
     field: :contest_id,

@@ -1,7 +1,8 @@
-defmodule ContestDirectorApi.ContestRegistration do
+defmodule ContestDirectorApi.Contestregistration do
   use ContestDirectorApi.Web, :model
 
   schema "contestregistrations" do
+    field :pilotname, :string
     belongs_to :contest, ContestDirectorApi.Contest
     belongs_to :pilotclass, ContestDirectorApi.Pilotclass
     belongs_to :pilot, ContestDirectorApi.Pilot
@@ -9,7 +10,7 @@ defmodule ContestDirectorApi.ContestRegistration do
     timestamps
   end
 
-  @required_fields ~w()
+  @required_fields ~w(pilotname)
   @optional_fields ~w()
 
   @doc """
