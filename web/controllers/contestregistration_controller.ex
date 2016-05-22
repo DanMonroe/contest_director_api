@@ -7,6 +7,16 @@ defmodule ContestDirectorApi.ContestregistrationController do
 
   plug :scrub_params, "data" when action in [:create, :update]
 
+  def find_contestregistrations_by_contest_and_pilotclass(contest_id, pilotclass_id) do
+    Logger.error("here 2")
+    # order_by: cr.pilotnumber,
+    query = from cr in Contestregistration,
+      where: cr.contest_id == ^contest_id and cr.pilotclass_id == ^pilotclass_id,
+      select: cr
+    Repo.all(query)
+  end
+
+
   def index(conn, _params) do
     contestregistrations = Repo.all(Contestregistration)
     render(conn, "index.json", data: contestregistrations)
@@ -15,8 +25,6 @@ defmodule ContestDirectorApi.ContestregistrationController do
   def create(conn, %{"data" => data = %{"type" => "contestregistrations",
     "attributes" => _contest_registration_params,
     "relationships" => relationship_params}}) do
-
-      Logger.debug "here1"
 
     changeset = Contestregistration.changeset(%Contestregistration{
       contest_id: String.to_integer(relationship_params["contest"]["data"]["id"]),

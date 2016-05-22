@@ -6,6 +6,16 @@ defmodule ContestDirectorApi.ManeuverController do
 
   plug :scrub_params, "data" when action in [:create, :update]
 
+  def find_maneuvers_by_maneuverset_id(maneuver_set_id) do
+
+    query = from m in Maneuver,
+      where: m.maneuverset_id == ^maneuver_set_id,
+      order_by: m.order,
+      select: m
+    Repo.all(query)
+
+  end
+
   def index(conn, _params) do
     maneuvers = Repo.all(Maneuver)
     render(conn, "index.json", data: maneuvers)
