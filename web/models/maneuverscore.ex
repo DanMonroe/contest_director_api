@@ -1,18 +1,17 @@
-defmodule ContestDirectorApi.Contestregistration do
+defmodule ContestDirectorApi.Maneuverscore do
   use ContestDirectorApi.Web, :model
 
-  schema "contestregistrations" do
-    field :pilotname, :string
-    belongs_to :contest, ContestDirectorApi.Contest
-    belongs_to :pilotclass, ContestDirectorApi.Pilotclass
-    belongs_to :pilot, ContestDirectorApi.Pilot
+  schema "maneuverscores" do
+    field :totalscore, :float
+    belongs_to :maneuver, ContestDirectorApi.Maneuver
+    belongs_to :roundscore, ContestDirectorApi.Roundscore
 
-    has_many :roundscores, ContestDirectorApi.Roundscore
+    has_many :scores, ContestDirectorApi.Score
 
     timestamps
   end
 
-  @required_fields ~w(pilotname)
+  @required_fields ~w(totalscore)
   @optional_fields ~w()
 
   @doc """

@@ -11,6 +11,8 @@ defmodule ContestDirectorApi.Round do
     belongs_to :pilotclass, ContestDirectorApi.Pilotclass
     belongs_to :maneuverset, ContestDirectorApi.Maneuverset
 
+    has_many :roundscores, ContestDirectorApi.Roundscore
+    
     timestamps
   end
 

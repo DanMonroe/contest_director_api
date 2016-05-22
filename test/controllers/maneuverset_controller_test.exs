@@ -21,7 +21,7 @@ defmodule ContestDirectorApi.ManeuversetControllerTest do
     %{
       "pilotclass" => %{
         "data" => %{
-          "type" => "pilotclass",
+          "type" => "pilotclasses",
           "id" => pilotclass.id
         }
       },

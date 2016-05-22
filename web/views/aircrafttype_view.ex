@@ -3,6 +3,6 @@ defmodule ContestDirectorApi.AircrafttypeView do
   use JaSerializer.PhoenixView
 
   attributes [:name, :inserted_at, :updated_at]
-  
 
+  has_many :pilotclasses
 end
