@@ -11,6 +11,10 @@ defmodule ContestDirectorApi.ManeuversetController do
     render(conn, "index.json", data: maneuversets)
   end
 
+  def get_maneuverset_by_id(id) do
+    Repo.get!(Maneuverset, id)
+  end
+
   def create(conn, %{"data" => data = %{"type" => "maneuversets",
     "attributes" => _maneuverset_params,
     "relationships" => relationship_params}}) do

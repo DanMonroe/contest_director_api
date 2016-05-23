@@ -2,6 +2,7 @@ defmodule ContestDirectorApi.ContestControllerTest do
   use ContestDirectorApi.ConnCase
 
   alias ContestDirectorApi.Contest
+  alias ContestDirectorApi.ContestController
   alias ContestDirectorApi.Repo
 
   @valid_attrs %{aircrafttype_id: 42, name: "some content", slug: "some content"}
@@ -22,6 +23,15 @@ defmodule ContestDirectorApi.ContestControllerTest do
   test "lists all entries on index", %{conn: conn} do
     conn = get conn, contest_path(conn, :index)
     assert json_response(conn, 200)["data"] == []
+  end
+
+
+  test "get contest set by id" do
+    Repo.insert! %ContestDirectorApi.Contest{name: "Beast", id: 2}
+
+    actual_contest = ContestController.get_contest_by_id 2
+    assert "Beast" == actual_contest.name
+    assert 2 == actual_contest.id
   end
 
   test "shows chosen resource", %{conn: conn} do

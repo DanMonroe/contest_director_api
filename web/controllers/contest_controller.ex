@@ -11,6 +11,10 @@ defmodule ContestDirectorApi.ContestController do
     render(conn, "index.json", data: contests)
   end
 
+  def get_contest_by_id(id) do
+    Repo.get!(Contest, id)
+  end
+
   def create(conn, %{"data" => data = %{"type" => "contests", "attributes" => _contest_params}}) do
     changeset = Contest.changeset(%Contest{}, Params.to_attributes(data))
 

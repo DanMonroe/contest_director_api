@@ -122,7 +122,26 @@ defmodule ContestDirectorApi.RoundControllerTest do
     assert 4 == round1.pilotclass_id
   end
 
-  test "create a round score for each contest registration" do
+  # test "show contest id" do
+  #   man_set1 =  Repo.insert! %ContestDirectorApi.Maneuverset{name: "Sportsman", id: 1}
+  #   contest1 = Repo.insert! %ContestDirectorApi.Contest{name: "Beast", id: 2}
+  #   pilotclass1 = Repo.insert! %ContestDirectorApi.Pilotclass{name: "Sportsman", id: 4}
+  #
+  #   round1 = Repo.insert! %ContestDirectorApi.Round{
+  #     name: "Round 1",
+  #     numjudges: 5,
+  #     drophigh: 2,
+  #     droplow: 1,
+  #     maneuverset_id: man_set1.id,
+  #     contest_id: contest1.id,
+  #     pilotclass_id: pilotclass1.id
+  #   }
+  #
+  #   actual_id = ContestDirectorApi.RoundController.return_id round1
+  #   assert 1 == actual_id
+  # end
+
+  test "create scores from new round" do
     man_set1 =  Repo.insert! %ContestDirectorApi.Maneuverset{name: "Sportsman", id: 1}
     contest1 = Repo.insert! %ContestDirectorApi.Contest{name: "Beast", id: 2}
     pilotclass1 = Repo.insert! %ContestDirectorApi.Pilotclass{name: "Sportsman", id: 4}
@@ -131,11 +150,7 @@ defmodule ContestDirectorApi.RoundControllerTest do
     reg2 = Repo.insert! %ContestDirectorApi.Contestregistration{id: 2, contest_id: contest1.id, pilotclass_id: pilotclass1.id, pilotname: "Dixie"}
     reg3 = Repo.insert! %ContestDirectorApi.Contestregistration{id: 3, contest_id: contest1.id, pilotclass_id: pilotclass1.id, pilotname: "Jack"}
 
-    # Logger.warn(reg1.id)
-    # Logger.warn(reg2.id)
-    # Logger.warn(reg3.id)
-
-    Logger.error("Creating new Round")
+    # Logger.error("Creating new Round")
 
     round1 = Repo.insert! %ContestDirectorApi.Round{
       name: "Round 1",
@@ -155,75 +170,105 @@ defmodule ContestDirectorApi.RoundControllerTest do
     assert 2 == round1.contest_id
     assert 4 == round1.pilotclass_id
 
-    Logger.warn("creating maneuvers")
+    # Logger.warn("creating maneuvers")
     Repo.insert! %ContestDirectorApi.Maneuver{maneuverset_id: man_set1.id, name: "First", order: 1}
     Repo.insert! %ContestDirectorApi.Maneuver{maneuverset_id: man_set1.id, name: "Second", order: 2}
     Repo.insert! %ContestDirectorApi.Maneuver{maneuverset_id: man_set1.id, name: "Third", order: 3}
     Repo.insert! %ContestDirectorApi.Maneuver{maneuverset_id: man_set1.id, name: "Fourth", order: 4}
 
-    # create_maneuvers man_set1
-
-    actual_maneuvers = ContestDirectorApi.ManeuverController.find_maneuvers_by_maneuverset_id man_set1.id
-
-    Logger.warn("Maneuvers found: " <> to_string(Enum.count(actual_maneuvers)))
-    # Logger.warn(Enum.count(actual_maneuvers))
-
-    Logger.warn("searching for registrations")
-
-    registrations = ContestDirectorApi.ContestregistrationController.find_contestregistrations_by_contest_and_pilotclass(contest1.id, pilotclass1.id)
-
-    Logger.warn("Registrations found: " <> to_string(Enum.count(registrations)))
-
-    Logger.warn("Looping through registrations")
-    Enum.each(registrations, fn(registration) ->
-      Logger.warn("This registration for " <> registration.pilotname)
-      Logger.error("Creating new roundscore")
-      rndscore = Repo.insert! %ContestDirectorApi.Roundscore{contestregistration: registration, round: round1, totalroundscore: 0.0}
-
-      Logger.warn("     pilot: " <> rndscore.contestregistration.pilotname)
-      Logger.warn("     totalscore: " <> to_string(rndscore.totalroundscore))
-      Logger.warn("     round name: " <> rndscore.round.name)
-
-      Logger.warn("   Looping through maneuvers")
-      Enum.each(actual_maneuvers, fn(thismaneuver) ->
-      Logger.warn("     this maneuver name: " <> thismaneuver.name)
-      Logger.warn("       Creating new maneuver score")
-        manscore = Repo.insert! %ContestDirectorApi.Maneuverscore{
-          maneuver: thismaneuver,
-          roundscore: rndscore,
-          totalscore: 0.0}
-      Logger.warn("         Creating new scores for " <> manscore.maneuver.name)
-        Enum.each 1..round1.numjudges, fn(_) ->
-          newscore = Repo.insert! %ContestDirectorApi.Score{
-            points: 0.0,
-            maneuverscore: manscore
-          }
-      Logger.warn("           score points: " <> to_string(newscore.points))
-        end
-      end)
-    end)
+    results = ContestDirectorApi.RoundController.create_scores_from_round(round1)
 
     allscores = Repo.all(from scores in ContestDirectorApi.Score, select: scores)
 
     assert 60 == Enum.count(allscores)
-
-    # rstest = Repo.insert! %ContestDirectorApi.Roundscore{contestregistration: reg1, round: round1, totalroundscore: 10.0}
-    # Logger.error(" id: " <> to_string(rstest.id))
-    # Logger.error(rstest.contestregistration.pilotname)
-    # Logger.error("   cr id: " <> to_string(rstest.contestregistration.id))
-    # Logger.error("   rs totalscore: " <> to_string(rstest.totalroundscore))
-    #
-    # query = from roundscore in ContestDirectorApi.Roundscore,
-    #   where: roundscore.contestregistration_id == ^reg1.id,
-    #   select: roundscore
-    # test = Repo.all(query)
-
-    # Logger.warn("Test: " <> test)
-    # test = Repo.get(ContestDirectorApi.Roundscore, reg1.id)
-
-    # actual_roundscores1 = ContestDirectorApi.RoundscoreController.find_roundscores_by_contestregistration(reg1.id)
-    # assert 1 == Enum.count(actual_roundscores1)
   end
+
+  # test "create a round score for each contest registration" do
+  #   man_set1 =  Repo.insert! %ContestDirectorApi.Maneuverset{name: "Sportsman", id: 1}
+  #   contest1 = Repo.insert! %ContestDirectorApi.Contest{name: "Beast", id: 2}
+  #   pilotclass1 = Repo.insert! %ContestDirectorApi.Pilotclass{name: "Sportsman", id: 4}
+  #
+  #   reg1 = Repo.insert! %ContestDirectorApi.Contestregistration{id: 1, contest_id: contest1.id, pilotclass_id: pilotclass1.id, pilotname: "Rebel"}
+  #   reg2 = Repo.insert! %ContestDirectorApi.Contestregistration{id: 2, contest_id: contest1.id, pilotclass_id: pilotclass1.id, pilotname: "Dixie"}
+  #   reg3 = Repo.insert! %ContestDirectorApi.Contestregistration{id: 3, contest_id: contest1.id, pilotclass_id: pilotclass1.id, pilotname: "Jack"}
+  #
+  #   # Logger.warn(reg1.id)
+  #   # Logger.warn(reg2.id)
+  #   # Logger.warn(reg3.id)
+  #
+  #   Logger.error("Creating new Round")
+  #
+  #   round1 = Repo.insert! %ContestDirectorApi.Round{
+  #     name: "Round 1",
+  #     numjudges: 5,
+  #     drophigh: 2,
+  #     droplow: 1,
+  #     maneuverset_id: man_set1.id,
+  #     contest_id: contest1.id,
+  #     pilotclass_id: pilotclass1.id
+  #   }
+  #
+  #   assert "Round 1" == round1.name
+  #   assert 5 == round1.numjudges
+  #   assert 2 == round1.drophigh
+  #   assert 1 == round1.droplow
+  #   assert 1 == round1.maneuverset_id
+  #   assert 2 == round1.contest_id
+  #   assert 4 == round1.pilotclass_id
+  #
+  #   Logger.warn("creating maneuvers")
+  #   Repo.insert! %ContestDirectorApi.Maneuver{maneuverset_id: man_set1.id, name: "First", order: 1}
+  #   Repo.insert! %ContestDirectorApi.Maneuver{maneuverset_id: man_set1.id, name: "Second", order: 2}
+  #   Repo.insert! %ContestDirectorApi.Maneuver{maneuverset_id: man_set1.id, name: "Third", order: 3}
+  #   Repo.insert! %ContestDirectorApi.Maneuver{maneuverset_id: man_set1.id, name: "Fourth", order: 4}
+  #
+  #   # create_maneuvers man_set1
+  #
+  #   actual_maneuvers = ContestDirectorApi.ManeuverController.find_maneuvers_by_maneuverset_id man_set1.id
+  #
+  #   Logger.warn("Maneuvers found: " <> to_string(Enum.count(actual_maneuvers)))
+  #   # Logger.warn(Enum.count(actual_maneuvers))
+  #
+  #   Logger.warn("searching for registrations")
+  #
+  #   registrations = ContestDirectorApi.ContestregistrationController.find_contestregistrations_by_contest_and_pilotclass(contest1.id, pilotclass1.id)
+  #
+  #   Logger.warn("Registrations found: " <> to_string(Enum.count(registrations)))
+  #
+  #   Logger.warn("Looping through registrations")
+  #   Enum.each(registrations, fn(registration) ->
+  #     Logger.warn("This registration for " <> registration.pilotname)
+  #     Logger.error("Creating new roundscore")
+  #     rndscore = Repo.insert! %ContestDirectorApi.Roundscore{contestregistration: registration, round: round1, totalroundscore: 0.0}
+  #
+  #     Logger.warn("     pilot: " <> rndscore.contestregistration.pilotname)
+  #     Logger.warn("     totalscore: " <> to_string(rndscore.totalroundscore))
+  #     Logger.warn("     round name: " <> rndscore.round.name)
+  #
+  #     Logger.warn("   Looping through maneuvers")
+  #     Enum.each(actual_maneuvers, fn(thismaneuver) ->
+  #     Logger.warn("     this maneuver name: " <> thismaneuver.name)
+  #     Logger.warn("       Creating new maneuver score")
+  #       manscore = Repo.insert! %ContestDirectorApi.Maneuverscore{
+  #         maneuver: thismaneuver,
+  #         roundscore: rndscore,
+  #         totalscore: 0.0}
+  #     Logger.warn("         Creating new scores for " <> manscore.maneuver.name)
+  #       Enum.each 1..round1.numjudges, fn(_) ->
+  #         newscore = Repo.insert! %ContestDirectorApi.Score{
+  #           points: 0.0,
+  #           maneuverscore: manscore
+  #         }
+  #     Logger.warn("           score points: " <> to_string(newscore.points))
+  #       end
+  #     end)
+  #   end)
+  #
+  #   allscores = Repo.all(from scores in ContestDirectorApi.Score, select: scores)
+  #
+  #   assert 60 == Enum.count(allscores)
+  #
+  # end
 
 
 

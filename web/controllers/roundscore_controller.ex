@@ -7,10 +7,11 @@ defmodule ContestDirectorApi.RoundscoreController do
   plug :scrub_params, "data" when action in [:create, :update]
 
   def find_roundscores_by_contestregistration(contestregistration_id) do
-    query = from rs in Roundscore,
-      where: rs.contestregistration_id == ^contestregistration_id,
-      select: rs
-    Repo.all(query)
+    # query = from rs in Roundscore,
+    #   where: rs.contestregistration_id == ^contestregistration_id,
+    #   select: rs
+    # Repo.all(query)
+    Repo.get!(Roundscore, contestregistration_id)
   end
 
 

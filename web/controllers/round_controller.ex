@@ -1,11 +1,13 @@
 defmodule ContestDirectorApi.RoundController do
   use ContestDirectorApi.Web, :controller
-  import Ecto.Query, only: [from: 2]
+  # import Ecto.Query, only: [from: 2]
 
   require Logger
 
   alias ContestDirectorApi.Round
-  alias ContestDirectorApi.Maneuver
+  # alias ContestDirectorApi.Maneuver
+  alias ContestDirectorApi.ContestController
+  alias ContestDirectorApi.ManeuversetController
   alias JaSerializer.Params
 
   plug :scrub_params, "data" when action in [:create, :update]
@@ -13,6 +15,52 @@ defmodule ContestDirectorApi.RoundController do
   def index(conn, _params) do
     rounds = Repo.all(Round)
     render(conn, "index.json", data: rounds)
+  end
+
+  def create_scores_from_round(newRound) do
+
+    contest = ContestController.get_contest_by_id newRound.contest_id
+
+    # maneuverset = ManeuversetController.get_maneuverset_by_id newRound.maneuverset_id
+
+    maneuvers = ContestDirectorApi.ManeuverController.find_maneuvers_by_maneuverset_id newRound.maneuverset_id
+
+    # Logger.warn("Maneuvers found: " <> to_string(Enum.count(maneuvers)))
+
+    # Logger.warn("searching for registrations")
+
+    registrations = ContestDirectorApi.ContestregistrationController.find_contestregistrations_by_contest_and_pilotclass(contest.id, newRound.pilotclass_id)
+
+    # Logger.warn("Registrations found: " <> to_string(Enum.count(registrations)))
+
+    # Logger.warn("Looping through registrations")
+    Enum.each(registrations, fn(registration) ->
+      # Logger.warn("This registration for " <> registration.pilotname)
+      # Logger.error("Creating new roundscore")
+      rndscore = Repo.insert! %ContestDirectorApi.Roundscore{contestregistration: registration, round: newRound, totalroundscore: 0.0}
+
+      # Logger.warn("     pilot: " <> rndscore.contestregistration.pilotname)
+      # Logger.warn("     totalscore: " <> to_string(rndscore.totalroundscore))
+      # Logger.warn("     round name: " <> rndscore.round.name)
+
+      # Logger.warn("   Looping through maneuvers")
+      Enum.each(maneuvers, fn(thismaneuver) ->
+      # Logger.warn("     this maneuver name: " <> thismaneuver.name)
+      # Logger.warn("       Creating new maneuver score")
+        manscore = Repo.insert! %ContestDirectorApi.Maneuverscore{
+          maneuver: thismaneuver,
+          roundscore: rndscore,
+          totalscore: 0.0}
+      # Logger.warn("         Creating new scores for " <> manscore.maneuver.name)
+        Enum.each 1..newRound.numjudges, fn(_) ->
+          Repo.insert! %ContestDirectorApi.Score{
+            points: 0.0,
+            maneuverscore: manscore
+          }
+      # Logger.warn("           score points: " <> to_string(newscore.points))
+        end
+      end)
+    end)
   end
 
   def create(conn, %{"data" => data = %{"type" => "rounds",

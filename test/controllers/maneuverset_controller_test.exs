@@ -2,6 +2,7 @@ defmodule ContestDirectorApi.ManeuversetControllerTest do
   use ContestDirectorApi.ConnCase
 
   alias ContestDirectorApi.Maneuverset
+  alias ContestDirectorApi.ManeuversetController
   alias ContestDirectorApi.Repo
 
   @valid_attrs %{name: "some content"}
@@ -26,6 +27,13 @@ defmodule ContestDirectorApi.ManeuversetControllerTest do
         }
       },
     }
+  end
+
+  test "get maneuver set by id" do
+    Repo.insert! %ContestDirectorApi.Maneuverset{name: "Sportsman", id: 38}
+    actual_maneuverset = ManeuversetController.get_maneuverset_by_id 38
+    assert "Sportsman" == actual_maneuverset.name
+    assert 38 == actual_maneuverset.id
   end
 
   test "lists all entries on index", %{conn: conn} do
