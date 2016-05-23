@@ -6,6 +6,14 @@ defmodule ContestDirectorApi.RoundscoreController do
 
   plug :scrub_params, "data" when action in [:create, :update]
 
+  def find_roundscores_by_contestregistration(contestregistration_id) do
+    query = from rs in Roundscore,
+      where: rs.contestregistration_id == ^contestregistration_id,
+      select: rs
+    Repo.all(query)
+  end
+
+
   def index(conn, _params) do
     roundscores = Repo.all(Roundscore)
     render(conn, "index.json", data: roundscores)
