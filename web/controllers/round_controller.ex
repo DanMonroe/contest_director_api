@@ -25,37 +25,37 @@ defmodule ContestDirectorApi.RoundController do
 
     maneuvers = ContestDirectorApi.ManeuverController.find_maneuvers_by_maneuverset_id newRound.maneuverset_id
 
-    Logger.warn("Maneuvers found: " <> to_string(Enum.count(maneuvers)))
+    # Logger.warn("Maneuvers found: " <> to_string(Enum.count(maneuvers)))
 
-    Logger.warn("searching for registrations")
+    # Logger.warn("searching for registrations")
 
     registrations = ContestDirectorApi.ContestregistrationController.find_contestregistrations_by_contest_and_pilotclass(contest.id, newRound.pilotclass_id)
 
-    Logger.warn("Registrations found: " <> to_string(Enum.count(registrations)))
+    # Logger.warn("Registrations found: " <> to_string(Enum.count(registrations)))
 
-    Logger.warn("Looping through registrations")
+    # Logger.warn("Looping through registrations")
     Enum.each(registrations, fn(registration) ->
-      Logger.warn("This registration for " <> registration.pilotname)
-      Logger.error("Creating new roundscore")
-      rndscore = Repo.insert! %ContestDirectorApi.Roundscore{contestregistration: registration, round: newRound, totalroundscore: 0.0}
+      # Logger.warn("This registration for " <> registration.pilotname)
+      # Logger.error("Creating new roundscore")
+      rndscore = Repo.insert! %ContestDirectorApi.Roundscore{contestregistration_id: registration.id, round_id: newRound.id, totalroundscore: 0.0, normalizedscore: 0.0}
 
-      Logger.warn("     pilot: " <> rndscore.contestregistration.pilotname)
-      Logger.warn("     totalscore: " <> to_string(rndscore.totalroundscore))
-      Logger.warn("     round name: " <> rndscore.round.name)
+      # Logger.warn("     pilot: " <> rndscore.contestregistration.pilotname)
+      # Logger.warn("     totalscore: " <> to_string(rndscore.totalroundscore))
+      # Logger.warn("     round name: " <> rndscore.round.name)
 
-      Logger.warn("   Looping through maneuvers")
+      # Logger.warn("   Looping through maneuvers")
       Enum.each(maneuvers, fn(thismaneuver) ->
-      Logger.warn("     this maneuver name: " <> thismaneuver.name)
-      Logger.warn("       Creating new maneuver score")
+      # Logger.warn("     this maneuver name: " <> thismaneuver.name)
+      # Logger.warn("       Creating new maneuver score")
         manscore = Repo.insert! %ContestDirectorApi.Maneuverscore{
-          maneuver: thismaneuver,
-          roundscore: rndscore,
+          maneuver_id: thismaneuver.id,
+          roundscore_id: rndscore.id,
           totalscore: 0.0}
-      Logger.warn("         Creating new scores for " <> manscore.maneuver.name)
+      # Logger.warn("         Creating new scores for " <> manscore.maneuver_id)
         Enum.each 1..newRound.numjudges, fn(_) ->
           Repo.insert! %ContestDirectorApi.Score{
             points: 0.0,
-            maneuverscore: manscore
+            maneuverscore_id: manscore.id
           }
       # Logger.warn("           score points: " <> to_string(newscore.points))
         end
@@ -73,10 +73,8 @@ defmodule ContestDirectorApi.RoundController do
       maneuverset_id: String.to_integer(relationship_params["maneuverset"]["data"]["id"])
       }, Params.to_attributes(data))
 
-# create_scores_from_round(round)
     case Repo.insert(changeset) do
       {:ok, round} ->
-        Logger.error(round.name)
         create_scores_from_round(round)
         conn
         |> put_status(:created)
