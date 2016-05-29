@@ -1,6 +1,8 @@
 defmodule ContestDirectorApi.RoundscoreController do
   use ContestDirectorApi.Web, :controller
 
+  require Logger
+
   alias ContestDirectorApi.Roundscore
   alias JaSerializer.Params
 
@@ -14,12 +16,32 @@ defmodule ContestDirectorApi.RoundscoreController do
     Repo.get!(Roundscore, contestregistration_id)
   end
 
+  def index(conn, params) do
+    contestregistrationId = params["filter"]["contestregistrationId"]
+    roundId = params["filter"]["roundId"]
+    if params["filter"]["contestregistrationId"] do
+      query = from rndScore in Roundscore,
+        where: rndScore.contestregistration_id == ^contestregistrationId and rndScore.round_id == ^roundId,
+        select: rndScore
 
-  def index(conn, _params) do
-    roundscores = Repo.all(Roundscore)
+      roundscores = Repo.all(query)
+    else
+      roundscores = Repo.all(Roundscore)
+    end
+
     render(conn, "index.json", data: roundscores)
   end
 
+#   def index(conn, %{"contestregistrationId" => contestregistrationId, "roundId" => roundId}) do
+# Logger.error("In extended index")
+#     query = from rndScore in Roundscore,
+#       where: rndScore.contestregistration_id == ^contestregistrationId and rndScore.round_id == ^roundId,
+#       select: rndScore
+#
+#     roundscores = Repo.all(query)
+#     render(conn, "index.json", data: roundscores)
+#   end
+#
   def create(conn, %{"data" => data = %{"type" => "roundscores", "attributes" => _roundscore_params}}) do
     changeset = Roundscore.changeset(%Roundscore{}, Params.to_attributes(data))
 

@@ -6,8 +6,18 @@ defmodule ContestDirectorApi.ManeuverscoreController do
 
   plug :scrub_params, "data" when action in [:create, :update]
 
-  def index(conn, _params) do
-    maneuverscores = Repo.all(Maneuverscore)
+  def index(conn, params) do
+    roundscoreId = params["filter"]["roundscoreId"]
+    if params["filter"]["roundscoreId"] do
+      query = from manScore in Maneuverscore,
+        where: manScore.roundscore_id == ^roundscoreId,
+        select: manScore
+
+      maneuverscores = Repo.all(query)
+    else
+      maneuverscores = Repo.all(Maneuverscore)
+    end
+
     render(conn, "index.json", data: maneuverscores)
   end
 
