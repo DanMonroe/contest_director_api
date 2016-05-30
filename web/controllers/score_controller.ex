@@ -6,12 +6,23 @@ defmodule ContestDirectorApi.ScoreController do
 
   plug :scrub_params, "data" when action in [:create, :update]
 
+
+      def scores(struct, conn) do
+            case struct.scores do
+              %Ecto.Association.NotLoaded{} ->
+                struct
+                |> Ecto.assoc(:scores)
+                |> Repo.all
+              other -> other
+            end
+          end
+
   def index(conn, _params) do
     scores = Repo.all(Score)
     render(conn, "index.json", data: scores)
   end
 
-  def create(conn, %{"data" => data = %{"type" => "score", "attributes" => _score_params}}) do
+  def create(conn, %{"data" => data = %{"type" => "scores", "attributes" => _score_params}}) do
     changeset = Score.changeset(%Score{}, Params.to_attributes(data))
 
     case Repo.insert(changeset) do
@@ -32,7 +43,7 @@ defmodule ContestDirectorApi.ScoreController do
     render(conn, "show.json", data: score)
   end
 
-  def update(conn, %{"id" => id, "data" => data = %{"type" => "score", "attributes" => _score_params}}) do
+  def update(conn, %{"id" => id, "data" => data = %{"type" => "scores", "attributes" => _score_params}}) do
     score = Repo.get!(Score, id)
     changeset = Score.changeset(score, Params.to_attributes(data))
 

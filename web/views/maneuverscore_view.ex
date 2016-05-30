@@ -11,5 +11,5 @@ defmodule ContestDirectorApi.ManeuverscoreView do
     field: :roundscore_id,
     type: "roundscore"
 
-    has_many :scores
+    has_many :scores, serializer: ContestDirectorApi.ScoreView, include: true
 end
