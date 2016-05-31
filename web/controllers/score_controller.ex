@@ -1,26 +1,39 @@
 defmodule ContestDirectorApi.ScoreController do
   use ContestDirectorApi.Web, :controller
-
+require Logger
   alias ContestDirectorApi.Score
   alias JaSerializer.Params
 
   plug :scrub_params, "data" when action in [:create, :update]
 
 
-      def scores(struct, conn) do
-            case struct.scores do
-              %Ecto.Association.NotLoaded{} ->
-                struct
-                |> Ecto.assoc(:scores)
-                |> Repo.all
-              other -> other
-            end
-          end
+  # def scores(struct, conn) do
+  #   case struct.scores do
+  #     %Ecto.Association.NotLoaded{} ->
+  #       struct
+  #       |> Ecto.assoc(:scores)
+  #       |> Repo.all
+  #     other -> other
+  #   end
+  # end
 
-  def index(conn, _params) do
-    scores = Repo.all(Score)
-    render(conn, "index.json", data: scores)
+  def index(conn, params) do
+
+    scores = params
+               |> score_query
+               |> Repo.all
+   render(conn, "index.json", data: scores)
+
+  #  scores = Repo.all(Score)
+  #   render(conn, "index.json", data: scores)
   end
+
+  defp score_query() do
+    from score in Score,
+      select: score
+  end
+
+  defp score_query(_), do: Score
 
   def create(conn, %{"data" => data = %{"type" => "scores", "attributes" => _score_params}}) do
     changeset = Score.changeset(%Score{}, Params.to_attributes(data))
